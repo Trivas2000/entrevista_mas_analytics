@@ -1,2 +1,2 @@
-# entrevista_mas_analytics
-Resolución del problema para la entrevista 
+# Entrevista_mas_analytics
+# Autor Tomás Rivas
