@@ -22,6 +22,18 @@ document.getElementById("metrics-filters").addEventListener("submit", e => {
   loadMetrics();
 });
 
+document.getElementById("upload-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const file = document.getElementById("csv-file").files[0];
+  const status = document.getElementById("upload-status");
+  status.textContent = "Subiendo...";
+  const fd = new FormData();
+  fd.append("file", file);
+  const res = await fetch(`${API_URL}/upload`, { method: "POST", body: fd });
+  const data = await res.json();
+  status.textContent = res.ok ? `OK — ${data.rows.toLocaleString()} filas cargadas` : `Error: ${data.detail}`;
+});
+
 async function loadMetrics() {
   const params = new URLSearchParams();
   const start = document.getElementById("date-start").value;

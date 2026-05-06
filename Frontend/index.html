@@ -91,7 +91,13 @@
   </header>
 
   <main>
-    <section id="upload" hidden></section>
+    <section id="upload" hidden>
+      <form id="upload-form">
+        <input type="file" id="csv-file" accept=".csv" required>
+        <button type="submit">Subir</button>
+      </form>
+      <p id="upload-status"></p>
+    </section>
     <section id="metrics" hidden>
       <nav class="sub-nav">
         <button data-metric="top-products" class="active">Top productos</button>

@@ -1,8 +1,9 @@
+import io
 from datetime import date
 from pathlib import Path
 
 import pandas as pd
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 
@@ -10,8 +11,7 @@ from fastapi.responses import Response
 # CAMBIAR DPS
 CSV_PATH = Path(r"C:\Users\Yoga Slim7\Desktop\Entrevista Mas\CSV\sales_transactions.csv")
 
-DATA = pd.read_csv(
-    CSV_PATH,
+CSV_OPTS = dict(
     parse_dates=["date"],
     dtype={
         "transaction_id": "string",
@@ -23,7 +23,15 @@ DATA = pd.read_csv(
         "customer_id": "string",
     },
 )
-DATA["revenue"] = DATA["quantity"] * DATA["unit_price"]
+
+
+def load(source) -> pd.DataFrame:
+    df = pd.read_csv(source, **CSV_OPTS)
+    df["revenue"] = df["quantity"] * df["unit_price"]
+    return df
+
+
+DATA = load(CSV_PATH)
 
 
 def agg_by(col: str) -> pd.DataFrame:
@@ -100,3 +108,16 @@ def sales_by_store():
 @app.get("/sales-by-category")
 def sales_by_category():
     return as_json(BY_CATEGORY)
+
+
+@app.post("/upload")
+async def upload(file: UploadFile):
+    global DATA, BY_STORE, BY_CATEGORY
+    try:
+        df = load(io.BytesIO(await file.read()))
+    except Exception as e:
+        raise HTTPException(400, f"CSV inválido: {e}")
+    DATA = df
+    BY_STORE = agg_by("store_id")
+    BY_CATEGORY = agg_by("category")
+    return {"rows": len(DATA)}
