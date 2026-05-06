@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sales Analytics</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <style>
+    body {
+      background: #e5e7eb;
+      margin: 0;
+      min-height: 100vh;
+    }
+    header {
+      background: #1e293b;
+      padding: 1rem 2rem;
+    }
+    nav {
+      display: flex;
+      justify-content: flex-start;
+      gap: 0.75rem;
+    }
+    nav button {
+      width: auto;
+      background: #3b82f6;
+      border-color: #3b82f6;
+    }
+    main {
+      padding: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <button data-view="upload">Subir CSV</button>
+      <button data-view="metrics">Métricas</button>
+      <button data-view="anomalies">Anomalías</button>
+      <button data-view="summary">Resumen ejecutivo</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="upload" hidden></section>
+    <section id="metrics" hidden></section>
+    <section id="anomalies" hidden></section>
+    <section id="summary"></section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
