@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,10 +20,60 @@
       justify-content: flex-start;
       gap: 0.75rem;
     }
-    nav button {
+    button {
       width: auto;
+    }
+    header nav button {
       background: #3b82f6;
       border-color: #3b82f6;
+    }
+    .sub-nav {
+      margin-bottom: 1.5rem;
+    }
+    .sub-nav button {
+      background: #64748b;
+      border-color: #64748b;
+    }
+    .sub-nav button.active {
+      background: #1e293b;
+      border-color: #1e293b;
+    }
+    #metrics-filters {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    #metrics-filters input {
+      width: auto;
+      background: #f3f4f6;
+      color: #111827;
+    }
+    #metrics-filters label {
+      color: #111827;
+      font-weight: 600;
+    }
+    #metrics-filters button {
+      width: auto;
+      background: #166534;
+      border-color: #166534;
+      color: white;
+      margin: 0;
+    }
+    #metrics-filters label,
+    #metrics-filters input {
+      margin: 0;
+    }
+    main h3 {
+      color: #111827;
+      font-weight: 700;
+    }
+    main table {
+      background: #f3f4f6;
+      --pico-table-row-stripped-background-color: transparent;
+      --pico-table-border-color: #d1d5db;
+      color: #111827;
     }
     main {
       padding: 2rem;
@@ -42,7 +92,34 @@
 
   <main>
     <section id="upload" hidden></section>
-    <section id="metrics" hidden></section>
+    <section id="metrics" hidden>
+      <nav class="sub-nav">
+        <button data-metric="top-products" class="active">Top productos</button>
+        <button data-metric="by-store">Ventas por tienda</button>
+        <button data-metric="by-category">Ventas por categoría</button>
+      </nav>
+
+      <div class="metric-panel" data-metric="top-products">
+        <h3>Top productos</h3>
+        <form id="metrics-filters">
+          <label>Desde <input type="date" id="date-start"></label>
+          <label>Hasta <input type="date" id="date-end"></label>
+          <label>Top N <input type="number" id="top-n" value="10" min="1" max="100"></label>
+          <button type="submit">Aplicar</button>
+        </form>
+        <table id="top-products"></table>
+      </div>
+
+      <div class="metric-panel" data-metric="by-store" hidden>
+        <h3>Ventas por tienda</h3>
+        <table id="by-store"></table>
+      </div>
+
+      <div class="metric-panel" data-metric="by-category" hidden>
+        <h3>Ventas por categoría</h3>
+        <table id="by-category"></table>
+      </div>
+    </section>
     <section id="anomalies" hidden></section>
     <section id="summary"></section>
   </main>
