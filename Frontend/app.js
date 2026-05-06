@@ -5,13 +5,15 @@ document.querySelectorAll("header nav button").forEach(btn => {
   btn.addEventListener("click", () => {
     sections.forEach(s => s.hidden = s.id !== btn.dataset.view);
     if (btn.dataset.view === "metrics") loadMetrics();
+    if (btn.dataset.view === "anomalies") loadAnomalies();
   });
 });
 
 document.querySelectorAll(".sub-nav button").forEach(btn => {
   btn.addEventListener("click", () => {
-    document.querySelectorAll(".sub-nav button").forEach(b => b.classList.toggle("active", b === btn));
-    document.querySelectorAll(".metric-panel").forEach(p => {
+    const parent = btn.closest("section");
+    parent.querySelectorAll(".sub-nav button").forEach(b => b.classList.toggle("active", b === btn));
+    parent.querySelectorAll(".metric-panel").forEach(p => {
       p.hidden = p.dataset.metric !== btn.dataset.metric;
     });
   });
@@ -54,8 +56,19 @@ async function loadMetrics() {
   renderTable("by-category", byCat, ["category", "revenue", "units", "transactions"]);
 }
 
+async function loadAnomalies() {
+  const data = await fetch(`${API_URL}/anomalies`).then(r => r.json());
+  const cols = ["transaction_id", "date", "store_id", "product_id", "category", "quantity", "unit_price", "customer_id"];
+  renderTable("anomalies-quantity", data.filter(r => r.quantity <= 0), cols);
+  renderTable("anomalies-price", data.filter(r => r.unit_price <= 0), cols);
+}
+
 function renderTable(id, rows, cols) {
-  const fmt = v => typeof v === "number" ? v.toLocaleString("en-US") : v ?? "";
+  const fmt = v => {
+    if (typeof v === "number") return v.toLocaleString("en-US");
+    if (typeof v === "string" && /^\d{4}-\d{2}-\d{2}T/.test(v)) return v.slice(0, 10);
+    return v ?? "";
+  };
   const head = `<thead><tr>${cols.map(c => `<th>${c}</th>`).join("")}</tr></thead>`;
   const body = `<tbody>${rows.map(r => `<tr>${cols.map(c => `<td>${fmt(r[c])}</td>`).join("")}</tr>`).join("")}</tbody>`;
   document.getElementById(id).innerHTML = head + body;

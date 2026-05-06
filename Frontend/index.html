@@ -126,7 +126,22 @@
         <table id="by-category"></table>
       </div>
     </section>
-    <section id="anomalies" hidden></section>
+    <section id="anomalies" hidden>
+      <nav class="sub-nav">
+        <button data-metric="quantity-le-0" class="active">Cantidad ≤ 0</button>
+        <button data-metric="price-le-0">Precio ≤ 0</button>
+      </nav>
+
+      <div class="metric-panel" data-metric="quantity-le-0">
+        <h3>Cantidad ≤ 0</h3>
+        <table id="anomalies-quantity"></table>
+      </div>
+
+      <div class="metric-panel" data-metric="price-le-0" hidden>
+        <h3>Precio unitario ≤ 0</h3>
+        <table id="anomalies-price"></table>
+      </div>
+    </section>
     <section id="summary"></section>
   </main>
 

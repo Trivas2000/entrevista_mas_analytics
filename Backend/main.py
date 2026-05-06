@@ -110,6 +110,11 @@ def sales_by_category():
     return as_json(BY_CATEGORY)
 
 
+@app.get("/anomalies")
+def anomalies():
+    return as_json(DATA[(DATA["quantity"] <= 0) | (DATA["unit_price"] <= 0)])
+
+
 @app.post("/upload")
 async def upload(file: UploadFile):
     global DATA, BY_STORE, BY_CATEGORY
