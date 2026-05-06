@@ -78,6 +78,32 @@
     main {
       padding: 2rem;
     }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .kpi {
+      background: #f3f4f6;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      border: 1px solid #d1d5db;
+    }
+    .kpi-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #111827;
+    }
+    .kpi-label {
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin-top: 0.25rem;
+    }
+    .period-info {
+      color: #6b7280;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -142,7 +168,10 @@
         <table id="anomalies-price"></table>
       </div>
     </section>
-    <section id="summary"></section>
+    <section id="summary">
+      <p id="period-info" class="period-info"></p>
+      <div id="kpi-grid" class="kpi-grid"></div>
+    </section>
   </main>
 
   <script src="app.js"></script>

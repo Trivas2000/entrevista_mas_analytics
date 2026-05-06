@@ -6,6 +6,7 @@ document.querySelectorAll("header nav button").forEach(btn => {
     sections.forEach(s => s.hidden = s.id !== btn.dataset.view);
     if (btn.dataset.view === "metrics") loadMetrics();
     if (btn.dataset.view === "anomalies") loadAnomalies();
+    if (btn.dataset.view === "summary") loadSummary();
   });
 });
 
@@ -55,6 +56,28 @@ async function loadMetrics() {
   renderTable("by-store", byStore, ["store_id", "revenue", "units", "transactions"]);
   renderTable("by-category", byCat, ["category", "revenue", "units", "transactions"]);
 }
+
+async function loadSummary() {
+  const d = await fetch(`${API_URL}/summary`).then(r => r.json());
+  const compact = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", notation: "compact", maximumFractionDigits: 1 });
+  const num = new Intl.NumberFormat("en-US");
+  const kpis = [
+    { label: "Revenue total", value: compact.format(d.total_revenue) },
+    { label: "Unidades vendidas", value: num.format(d.total_units) },
+    { label: "Transacciones", value: num.format(d.rows) },
+    { label: "Tiendas", value: d.stores },
+    { label: "Productos", value: d.products },
+    { label: "Categorías", value: d.categories },
+    { label: "Clientes únicos", value: num.format(d.customers) },
+    { label: "Transacciones con clientes identificados", value: (100 - d.missing_customer_pct).toFixed(2) + "%" },
+  ];
+  document.getElementById("period-info").textContent = `Datos del ${d.date_range.start} al ${d.date_range.end}`;
+  document.getElementById("kpi-grid").innerHTML = kpis.map(k =>
+    `<div class="kpi"><div class="kpi-value">${k.value}</div><div class="kpi-label">${k.label}</div></div>`
+  ).join("");
+}
+
+loadSummary();
 
 async function loadAnomalies() {
   const data = await fetch(`${API_URL}/anomalies`).then(r => r.json());
