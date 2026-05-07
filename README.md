@@ -1,6 +1,11 @@
 # Entrevista_mas_analytics
 # Autor Tomás Rivas
+# Testeado en Windows
 
+**App deployeada en: https://tomirivasacuna.cl/**
+
+*Nota*: Hay harta información cacheada asi que la app funciona mejor al refrescarla antes de subir un nuevo CSV
+ 
 Instrucciones para correr:
 
 **Backend (desde la carpeta Backend)**:
