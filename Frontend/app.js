@@ -35,6 +35,7 @@ document.getElementById("upload-form").addEventListener("submit", async e => {
   const res = await fetch(`${API_URL}/upload`, { method: "POST", body: fd });
   const data = await res.json();
   status.textContent = res.ok ? `OK — ${data.rows.toLocaleString()} filas cargadas` : `Error: ${data.detail}`;
+  if (res.ok) loadSummary();
 });
 
 async function loadMetrics() {
@@ -58,7 +59,7 @@ async function loadMetrics() {
 }
 
 async function loadSummary() {
-  const d = await fetch(`${API_URL}/summary`).then(r => r.json());
+  const d = await fetch(`${API_URL}/summary`, { cache: "no-cache" }).then(r => r.json());
   const compact = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", notation: "compact", maximumFractionDigits: 1 });
   const num = new Intl.NumberFormat("en-US");
   const kpis = [
@@ -71,7 +72,8 @@ async function loadSummary() {
     { label: "Clientes únicos", value: num.format(d.customers) },
     { label: "Transacciones con clientes identificados", value: (100 - d.missing_customer_pct).toFixed(2) + "%" },
   ];
-  document.getElementById("period-info").textContent = `Datos del ${d.date_range.start} al ${d.date_range.end}`;
+  const flip = s => s.split("-").reverse().join("-");
+  document.getElementById("period-info").innerHTML = `Datos del <strong>${flip(d.date_range.start)}</strong> al <strong>${flip(d.date_range.end)}</strong>`;
   document.getElementById("kpi-grid").innerHTML = kpis.map(k =>
     `<div class="kpi"><div class="kpi-value">${k.value}</div><div class="kpi-label">${k.label}</div></div>`
   ).join("");

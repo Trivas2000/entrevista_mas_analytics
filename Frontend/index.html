@@ -80,7 +80,7 @@
     }
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 1rem;
     }
     .kpi {
@@ -100,9 +100,18 @@
       margin-top: 0.25rem;
     }
     .period-info {
+      display: block;
+      width: fit-content;
+      margin: 0 auto 1rem auto;
+      background: #f9fafb;
       color: #6b7280;
       font-size: 0.875rem;
-      margin-bottom: 1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      border: 1px solid #d1d5db;
+    }
+    .period-info strong {
+      color: #111827;
     }
   </style>
 </head>
@@ -174,6 +183,6 @@
     </section>
   </main>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=2"></script>
 </body>
 </html>
