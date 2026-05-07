@@ -3,17 +3,20 @@
 
 Instrucciones para correr:
 
-**Backend**:
+**Backend (desde la carpeta Backend)**:
 ```
+python3 -m venv venv
+source venv/bin/activate       # macOS / Linux
+venv\Scripts\activate          # Windows
 pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
 Queda en http://127.0.0.1:8000
 
-**Frontend**:
+**Frontend (desde la carpeta Frontend)**:
 ```
-python -m http.server 5500
+python3 -m http.server 5500
 ```
 Link http://127.0.0.1:5500
 
