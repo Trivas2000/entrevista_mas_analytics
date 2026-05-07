@@ -3,18 +3,33 @@
 
 Instrucciones para correr:
 
-Decisiones:
+**Backend**:
+```
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
 
-Realizar una App Web
+Queda en http://127.0.0.1:8000
 
-Esto ya que no tenemos claridad del perfil del usuario, y una app web es de uso sencillo y relativamente universal, comparado con un script o un un producto sin interfaz grafica.
+**Frontend**:
+```
+python -m http.server 5500
+```
+Link http://127.0.0.1:5500
 
-Tener backend:
 
-Considere necesario el backend pensando en la linea donde piden escalabilidad, asi podemos asegurar que el sistema funcione con archivos grandes.
+**Decisiones**:
 
-Usar Fast Api para el back:
+*Realizar una App Web*
 
-Es facil y simple, perfecto para un ejercicio breve. Ademas usa Python y queria usar Pandas que es comodo para procesar CSV.
+Esto ya que no tenemos claridad del perfil del usuario, y una app web es de uso sencillo y relativamente universal, comparado con un script o un producto sin interfaz gráfica.
+
+*Tener backend*
+
+Consideré necesario el backend pensando en la línea donde piden escalabilidad, así podemos asegurar que el sistema funcione con archivos grandes.
+
+*Usar Fast Api para el back*
+
+Es fácil y simple para un ejercicio breve. Además usa Python y quería usar Pandas que es cómodo para procesar CSV.
 
 
