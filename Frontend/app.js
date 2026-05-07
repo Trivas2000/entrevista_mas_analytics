@@ -1,4 +1,6 @@
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = location.hostname.match(/^(localhost|127\.)/)
+  ? "http://127.0.0.1:8000"
+  : "https://entrevistamasanalytics-production.up.railway.app";
 
 const sections = document.querySelectorAll("main > section");
 document.querySelectorAll("header nav button").forEach(btn => {
