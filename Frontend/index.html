@@ -165,6 +165,8 @@
       <nav class="sub-nav">
         <button data-metric="quantity-le-0" class="active">Cantidad ≤ 0</button>
         <button data-metric="price-le-0">Precio ≤ 0</button>
+        <button data-metric="duplicate-id">Transaction ID duplicado</button>
+        <button data-metric="quantity-high">Cantidad alta</button>
       </nav>
 
       <div class="metric-panel" data-metric="quantity-le-0">
@@ -176,6 +178,16 @@
         <h3>Precio unitario ≤ 0</h3>
         <table id="anomalies-price"></table>
       </div>
+
+      <div class="metric-panel" data-metric="duplicate-id" hidden>
+        <h3>ID de transacción duplicado</h3>
+        <table id="anomalies-duplicate"></table>
+      </div>
+
+      <div class="metric-panel" data-metric="quantity-high" hidden>
+        <h3>Cantidad alta (&gt; p99 × 2)</h3>
+        <table id="anomalies-quantity-high"></table>
+      </div>
     </section>
     <section id="summary">
       <p id="period-info" class="period-info"></p>
@@ -183,6 +195,6 @@
     </section>
   </main>
 
-  <script src="app.js?v=2"></script>
+  <script src="app.js?v=6"></script>
 </body>
 </html>

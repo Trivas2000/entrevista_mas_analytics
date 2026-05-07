@@ -112,7 +112,17 @@ def sales_by_category():
 
 @app.get("/anomalies")
 def anomalies():
-    return as_json(DATA[(DATA["quantity"] <= 0) | (DATA["unit_price"] <= 0)])
+    qty_le_0 = DATA["quantity"] <= 0
+    price_le_0 = DATA["unit_price"] <= 0
+    dup_id = DATA["transaction_id"].duplicated(keep=False)
+    qty_threshold = DATA.loc[DATA["quantity"] > 0, "quantity"].quantile(0.99) * 2
+    qty_high = DATA["quantity"] > qty_threshold
+    mask = qty_le_0 | price_le_0 | dup_id | qty_high
+    out = DATA[mask].copy()
+    checks = [("quantity_le_0", qty_le_0), ("price_le_0", price_le_0),
+              ("duplicate_id", dup_id), ("quantity_high", qty_high)]
+    out["reason"] = [",".join(n for n, m in checks if m.loc[i]) for i in out.index]
+    return as_json(out)
 
 
 @app.post("/upload")

@@ -82,10 +82,12 @@ async function loadSummary() {
 loadSummary();
 
 async function loadAnomalies() {
-  const data = await fetch(`${API_URL}/anomalies`).then(r => r.json());
+  const data = await fetch(`${API_URL}/anomalies`, { cache: "no-cache" }).then(r => r.json());
   const cols = ["transaction_id", "date", "store_id", "product_id", "category", "quantity", "unit_price", "customer_id"];
-  renderTable("anomalies-quantity", data.filter(r => r.quantity <= 0), cols);
-  renderTable("anomalies-price", data.filter(r => r.unit_price <= 0), cols);
+  renderTable("anomalies-quantity", data.filter(r => r.reason.includes("quantity_le_0")), cols);
+  renderTable("anomalies-price", data.filter(r => r.reason.includes("price_le_0")), cols);
+  renderTable("anomalies-duplicate", data.filter(r => r.reason.includes("duplicate_id")), cols);
+  renderTable("anomalies-quantity-high", data.filter(r => r.reason.includes("quantity_high")), cols);
 }
 
 function renderTable(id, rows, cols) {
