@@ -1,15 +1,11 @@
 import io
 from datetime import date
-from pathlib import Path
 
 import pandas as pd
 from fastapi import FastAPI, HTTPException, Query, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 
-
-# CAMBIAR DPS
-CSV_PATH = Path(r"C:\Users\Yoga Slim7\Desktop\Entrevista Mas\CSV\sales_transactions.csv")
 
 CSV_OPTS = dict(
     parse_dates=["date"],
@@ -31,9 +27,6 @@ def load(source) -> pd.DataFrame:
     return df
 
 
-DATA = load(CSV_PATH)
-
-
 def agg_by(col: str) -> pd.DataFrame:
     return (
         DATA.groupby(col, observed=True)
@@ -53,8 +46,14 @@ def as_json(df: pd.DataFrame) -> Response:
     return Response(df.to_json(orient="records", date_format="iso"), media_type="application/json")
 
 
-BY_STORE = agg_by("store_id")
-BY_CATEGORY = agg_by("category")
+def require_data():
+    if DATA.empty:
+        raise HTTPException(503, "Sin datos. Subí un CSV via POST /upload")
+
+
+DATA = pd.DataFrame()
+BY_STORE = pd.DataFrame()
+BY_CATEGORY = pd.DataFrame()
 
 app = FastAPI()
 app.add_middleware(
@@ -67,6 +66,7 @@ app.add_middleware(
 
 @app.get("/summary")
 def summary():
+    require_data()
     return {
         "rows": len(DATA),
         "date_range": {
@@ -85,6 +85,7 @@ def summary():
 
 @app.get("/top-products")
 def top_products(start: date | None = None, end: date | None = None, n: int = Query(10, ge=1, le=100)):
+    require_data()
     df = DATA
     if start:
         df = df[df["date"] >= pd.Timestamp(start)]
@@ -102,16 +103,19 @@ def top_products(start: date | None = None, end: date | None = None, n: int = Qu
 
 @app.get("/sales-by-store")
 def sales_by_store():
+    require_data()
     return as_json(BY_STORE)
 
 
 @app.get("/sales-by-category")
 def sales_by_category():
+    require_data()
     return as_json(BY_CATEGORY)
 
 
 @app.get("/anomalies")
 def anomalies():
+    require_data()
     qty_le_0 = DATA["quantity"] <= 0
     price_le_0 = DATA["unit_price"] <= 0
     dup_id = DATA["transaction_id"].duplicated(keep=False)
